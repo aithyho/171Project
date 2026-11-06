@@ -50,8 +50,8 @@ class StudentAI():
                 score = 0
 
                 # Get the first two positions of this move
-                start = candidate.l[0]
-                end = candidate.l[1]
+                start = candidate.seq[0]
+                end = candidate.seq[1]
 
                 # Calculate how many rows the checker travels
                 row_difference = abs(end[0] - start[0])
@@ -61,7 +61,7 @@ class StudentAI():
                 if row_difference == 2:
 
                     # Number of captures equals number of jumps
-                    captures = len(candidate.l) - 1
+                    captures = len(candidate.seq) - 1
 
                     # Reward 10 points per captured piece
                     score = 10 * captures
@@ -82,8 +82,8 @@ class StudentAI():
                     for opponent_move in opponent_group:
 
                         # Get the first two positions
-                        opponent_start = opponent_move.l[0]
-                        opponent_end = opponent_move.l[1]
+                        opponent_start = opponent_move.seq[0]
+                        opponent_end = opponent_move.seq[1]
 
                         # Calculate the opponent's row difference
                         opponent_row_difference = abs(
@@ -92,7 +92,7 @@ class StudentAI():
 
                         # Determine how many pieces are captured
                         if opponent_row_difference == 2:
-                            opponent_captures = len(opponent_move.l) - 1
+                            opponent_captures = len(opponent_move.seq) - 1
                         else:
                             opponent_captures = 0
 
@@ -116,3 +116,10 @@ class StudentAI():
 
         # STEP 10: Select the highest-scoring move
         move = best_move
+
+        # ADDED (STEP 11): Apply our chosen move to our own internal board.
+        self.board.make_move(move, self.color)
+
+        # ADDED (STEP 12): Return the chosen move to the game runner.
+        # Previously get_move() returned None, which would crash the game.
+        return move
